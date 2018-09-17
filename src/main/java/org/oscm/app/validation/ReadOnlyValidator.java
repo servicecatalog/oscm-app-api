@@ -7,10 +7,6 @@ public class ReadOnlyValidator implements ConstraintValidator<ReadOnly, String> 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-
-        if(value!=null){
-            return false;
-        }
-        return true;
+        return value == null;
     }
 }

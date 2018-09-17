@@ -39,7 +39,7 @@ public class InstanceResourceTest {
         instanceDTO.setOrganizationId("sampleOrgId");
         instanceDTO.setReferenceId("13de453w");
         instanceDTO.setControllerId("ess.vmware");
-        instanceDTO.setProvisioningStatus(ProvisioningStatus.COMPLETED);
+//        instanceDTO.setProvisioningStatus(ProvisioningStatus.COMPLETED);
         instanceDTO.setSubscriptionId("sub_3451245");
 
         Mockito.when(instanceService.getInstance(1)).thenReturn(Optional.of(instanceDTO));
@@ -60,7 +60,7 @@ public class InstanceResourceTest {
         instanceDTO.setOrganizationId("sampleOrgId1");
         instanceDTO.setReferenceId("4667666");
         instanceDTO.setControllerId("ess.vmware");
-        instanceDTO.setProvisioningStatus(ProvisioningStatus.WAITING_FOR_SYSTEM_CREATION);
+//        instanceDTO.setProvisioningStatus(ProvisioningStatus.WAITING_FOR_SYSTEM_CREATION);
         instanceDTO.setSubscriptionId("sub_1244565");
 
         InstanceDTO instanceDTO2 = new InstanceDTO();
@@ -68,7 +68,7 @@ public class InstanceResourceTest {
         instanceDTO2.setOrganizationId("sampleOrgId");
         instanceDTO2.setReferenceId("13de453w");
         instanceDTO2.setControllerId("ess.openstack");
-        instanceDTO2.setProvisioningStatus(ProvisioningStatus.COMPLETED);
+//        instanceDTO2.setProvisioningStatus(ProvisioningStatus.COMPLETED);
         instanceDTO2.setSubscriptionId("sub_3451245");
 
         Mockito.when(instanceService.getAllInstances())
