@@ -134,14 +134,4 @@ public class InstanceResourceTest {
         return instanceDTO;
     }
 
-    private InstanceDTO updatedInstance(){
-        InstanceDTO instanceDTO = new InstanceDTO();
-        instanceDTO.setId(1);
-        instanceDTO.setOrganizationId("changedOrgId");
-        instanceDTO.setReferenceId("121212");
-        instanceDTO.setControllerId("ess.changed.vmware");
-        instanceDTO.setSubscriptionId("chanedSubscId");
-        instanceDTO.setOrganizationName("changedOrganization");
-        return instanceDTO;
-    }
 }
