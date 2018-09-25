@@ -3,9 +3,7 @@ package org.oscm.app.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.oscm.app.domain.enumeration.ProvisioningStatus;
 import org.oscm.app.service.intf.InstanceService;
 import org.oscm.app.dto.InstanceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -71,7 +68,6 @@ public class InstanceResourceTest {
         instanceDTO2.setOrganizationId("sampleOrgId");
         instanceDTO2.setReferenceId("13de453w");
         instanceDTO2.setControllerId("ess.openstack");
-//        instanceDTO2.setProvisioningStatus(ProvisioningStatus.COMPLETED);
         instanceDTO2.setSubscriptionId("sub_3451245");
 
         Mockito.when(instanceService.getAllInstances())
@@ -126,9 +122,6 @@ public class InstanceResourceTest {
                 .andExpect(status().isNoContent());
 
     }
-
-
-
 
     private InstanceDTO newInstance(){
         InstanceDTO instanceDTO = new InstanceDTO();
