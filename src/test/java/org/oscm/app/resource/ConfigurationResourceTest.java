@@ -77,7 +77,7 @@ public class ConfigurationResourceTest {
 
         //when
         when(configurationService.getAllConfigurations())
-                .thenReturn(Arrays.asList(configurationDTO1));
+                .thenReturn(Arrays.asList(configurationDTO1, configurationDTO2));
 
         //then
         mvc.perform(get("/configurations"))
