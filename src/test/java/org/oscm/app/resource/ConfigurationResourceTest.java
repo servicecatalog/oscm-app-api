@@ -172,27 +172,6 @@ public class ConfigurationResourceTest {
     }
 
 
-    @Test
-    public void testGettingConfigurationSettings() throws Exception{
-        //given
-
-
-
-    }
-
-
-    @Test
-    public void testGettingConfiguration() throws Exception{
-        long confId = 1;
-        ConfigurationSettingDTO configurationSettingDTO = configurationSettingDTO();
-
-        //when
-        Mockito.when(configurationService.getConfigurationSettings(1)).thenReturn(Arrays.asList(configurationSettingDTO));
-
-        //then
-
-    }
-
 
     private ControllerDTO controllerDTO1(){
         ControllerDTO controllerDTO = new ControllerDTO();
