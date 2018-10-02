@@ -15,5 +15,7 @@ public interface InstanceService {
 
     void deleteInstance(long id);
 
+    InstanceDTO updateInstance(InstanceDTO InstanceDTO, Optional<InstanceDTO> result);
+
     void save(InstanceDTO instanceDTO);
 }

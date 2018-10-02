@@ -94,7 +94,8 @@ public class ConfigurationResource {
     })
     @PutMapping("/configurations/{configurationId}")
     public ResponseEntity<ConfigurationDTO> updateConfiguration(
-            @ApiParam(value = ApiParamValue.CONFIGURATION_ID, required = true) @PathVariable long configurationId,
+            @ApiParam(value = ApiParamValue.CONFIGURATION_ID, required = true)
+            @PathVariable long configurationId,
             @ApiParam(value = ApiParamValue.CONFIGURATION, required = true)
             @Valid @RequestBody ConfigurationDTO configuration) {
 
