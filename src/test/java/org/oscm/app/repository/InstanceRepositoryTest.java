@@ -52,7 +52,7 @@ public class InstanceRepositoryTest {
         List<Instance> instances = repository.findAll();
 
         //then
-        assertEquals(2, instances.size());
+        assertEquals(10, instances.size());
     }
 
 }
