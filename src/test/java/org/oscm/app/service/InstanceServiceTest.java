@@ -48,12 +48,14 @@ public class InstanceServiceTest {
 
         //given
         Instance instance = new Instance();
+        instance.setId(1);
         instance.setOrganizationId("sampleOrgId");
         instance.setReferenceId("13de453w");
         instance.setControllerId("ess.vmware");
         instance.setProvisioningStatus(ProvisioningStatus.COMPLETED);
         instance.setSubscriptionId("sub_3451245");
-        Mockito.when(repository.findById(1l)).thenReturn(Optional.of(instance));
+        long id = 1;
+        Mockito.when(repository.findById(id)).thenReturn(Optional.of(instance));
 
         //when
         InstanceDTO instanceDTO = service.getInstance(1).get();
@@ -62,7 +64,7 @@ public class InstanceServiceTest {
         assertEquals(instanceDTO.getOrganizationId(), instance.getOrganizationId());
         assertEquals(instanceDTO.getReferenceId(), instance.getReferenceId());
         assertEquals(instanceDTO.getControllerId(), instance.getControllerId());
-        assertEquals(instanceDTO.getProvisioningStatus(), instance.getProvisioningStatus());
+        assertEquals(instanceDTO.getProvisioningStatus(), instance.getProvisioningStatus().toString());
         assertEquals(instanceDTO.getSubscriptionId(), instance.getSubscriptionId());
     }
 
