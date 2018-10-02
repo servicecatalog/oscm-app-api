@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.oscm.app.dto.ConfigurationDTO;
 import org.oscm.app.dto.ConfigurationSettingDTO;
 import org.oscm.app.dto.ControllerDTO;
-import org.oscm.app.dto.InstanceDTO;
 import org.oscm.app.service.intf.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,17 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.print.attribute.standard.Media;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.modelmapper.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -130,9 +125,6 @@ public class ConfigurationResourceTest {
                 .andExpect(jsonPath("$.organizationId").value("aws"));
     }
 
-    @MockBean
-    ConfigurationResource configurationResource;
-
     @Test
     public void testUpdatingConfiguration() throws Exception{
         //given
@@ -148,11 +140,10 @@ public class ConfigurationResourceTest {
 
         configurationDTO.setOrganizationId("changedOrg");
 
-        when(configurationService.updateConfiguration(configurationDTO))
+        when(configurationService.updateConfiguration(any(ConfigurationDTO.class)))
                 .thenReturn(configurationDTO);
 
         String configuration = mapper.writeValueAsString(configurationDTO);
-        String longId = String.valueOf(1);
 
         //then
         mvc.perform(put("/configurations/{configurationId}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -166,13 +157,12 @@ public class ConfigurationResourceTest {
     @Test
     public void testDeletingConfiguration() throws Exception{
 
-        ConfigurationDTO configurationDTO = configurationDTO1();
-        Optional<ConfigurationDTO> configurationDTO1 = Optional.of(configurationDTO);
+        //given
+        Optional<ConfigurationDTO> configurationDTO1 = Optional.of(configurationDTO1());
 
+        //when
         when(configurationService.getConfigurationById(1)).thenReturn(configurationDTO1);
         doNothing().when(configurationService).deleteConfiguration(1);
-
-        String longId = String.valueOf(1);
 
         //then
         mvc.perform(delete("/configurations/{configurationId}", 1)
