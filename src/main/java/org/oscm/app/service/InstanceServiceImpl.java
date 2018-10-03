@@ -1,6 +1,8 @@
 package org.oscm.app.service;
 
 import org.modelmapper.ModelMapper;
+import org.oscm.app.dto.InstanceAttributeDTO;
+import org.oscm.app.dto.InstanceParameterDTO;
 import org.oscm.app.service.intf.InstanceService;
 import org.oscm.app.domain.Instance;
 import org.oscm.app.domain.enumeration.ProvisioningStatus;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,6 +71,47 @@ public class InstanceServiceImpl implements InstanceService {
     @Override
     public void deleteInstance(long id) {
         repository.deleteById(id);
+    }
+
+
+    @Override
+    public InstanceDTO updateInstance(InstanceDTO instanceDTO,  Optional<InstanceDTO> result) {
+
+            Map<String, String> keyToValue = instanceDTO.getAttributes().stream().collect(Collectors.toMap(
+                    InstanceAttributeDTO::getKey,
+                    InstanceAttributeDTO::getValue
+            ));
+            for (InstanceAttributeDTO instanceAttributeDTO : result.get().getAttributes()) {
+                String newValue = keyToValue.get(instanceAttributeDTO.getKey());
+                if (newValue != null) {
+                    instanceAttributeDTO.setValue(newValue);
+                    keyToValue.remove(instanceAttributeDTO.getKey());
+                }
+            }
+            for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO.getAttributes()) {
+                if (keyToValue.containsKey(instanceAttributeDTO.getKey())) {
+                    result.get().getAttributes().add(instanceAttributeDTO);
+                }
+            }
+
+            Map<String, String> keyToValueParam = instanceDTO.getParameters().stream().collect(Collectors.toMap(
+                    InstanceParameterDTO::getKey,
+                    InstanceParameterDTO::getValue
+            ));
+            for (InstanceParameterDTO instanceParameterDTO : result.get().getParameters()) {
+                String newValue = keyToValueParam.get(instanceParameterDTO.getKey());
+                if (newValue != null) {
+                    instanceParameterDTO.setValue(newValue);
+                    keyToValueParam.remove(instanceParameterDTO.getKey());
+                }
+            }
+            for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO.getAttributes()) {
+                if (keyToValueParam.containsKey(instanceAttributeDTO.getKey())) {
+                    result.get().getAttributes().add(instanceAttributeDTO);
+                }
+            }
+            save(instanceDTO);
+            return instanceDTO;
     }
 
 
