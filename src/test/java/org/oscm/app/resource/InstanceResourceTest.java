@@ -3,9 +3,8 @@ package org.oscm.app.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.oscm.app.service.intf.InstanceService;
 import org.oscm.app.dto.InstanceDTO;
+import org.oscm.app.service.intf.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,15 +12,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(InstanceResource.class)
@@ -30,54 +30,43 @@ public class InstanceResourceTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private InstanceService instanceService;
-
-
     @Autowired
     private ObjectMapper mapper;
 
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8")
-    );
+    @MockBean
+    private InstanceService instanceService;
 
     @Test
-    public void testGetInstanceResponse() throws Exception {
+    public void testGetInstance() throws Exception {
 
         // given
         InstanceDTO instanceDTO = newInstance();
+        long id = instanceDTO.getId();
 
-        Mockito.when(instanceService.getInstance(1)).thenReturn(Optional.of(instanceDTO));
+        // when
+        when(instanceService.getInstance(id)).thenReturn(Optional.of(instanceDTO));
 
-        // when and then
-        mvc.perform(get("/instances/1"))
+        // then
+        mvc.perform(get("/instances/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.organizationId").value("sampleOrgId1"));
-
+                .andExpect(jsonPath("$.organizationId").value(instanceDTO.getOrganizationId()));
     }
 
     @Test
-    public void testGetInstancesResponse() throws Exception {
+    public void testGetInstances() throws Exception {
 
         // given
         InstanceDTO instanceDTO = newInstance();
+        InstanceDTO instanceDTO2 = newInstance();
 
-        InstanceDTO instanceDTO2 = new InstanceDTO();
-        instanceDTO2.setId(2);
-        instanceDTO2.setOrganizationId("sampleOrgId");
-        instanceDTO2.setReferenceId("13de453w");
-        instanceDTO2.setControllerId("ess.openstack");
-        instanceDTO2.setSubscriptionId("sub_3451245");
-
-        Mockito.when(instanceService.getAllInstances())
+        // when
+        when(instanceService.getAllInstances())
                 .thenReturn(Arrays.asList(instanceDTO, instanceDTO2));
 
-        // when and then
+        // when then
         mvc.perform(get("/instances"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
-
     }
 
     @Test
@@ -86,44 +75,38 @@ public class InstanceResourceTest {
         //given
         InstanceDTO instanceDTO = newInstance();
 
-
         //when
-        Mockito.when(instanceService.createInstance(any(InstanceDTO.class)))
-        .thenReturn(instanceDTO);
+        when(instanceService.createInstance(any(InstanceDTO.class)))
+                .thenReturn(instanceDTO);
 
         String instance = mapper.writeValueAsString(instanceDTO);
 
-
         //then
-        mvc.perform(post("/instances").contentType(APPLICATION_JSON_UTF8).content(instance))
+        mvc.perform(post("/instances").contentType(MediaType.APPLICATION_JSON_UTF8).content(instance))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.organizationId").value("sampleOrgId1"))
-                .andExpect(jsonPath("$.referenceId").value("4667666"))
-                .andExpect(jsonPath("$.subscriptionId").value("sub_1244565"));
-
-
+                .andExpect(jsonPath("$.organizationId").value(instanceDTO.getOrganizationId()))
+                .andExpect(jsonPath("$.referenceId").value(instanceDTO.getReferenceId()))
+                .andExpect(jsonPath("$.subscriptionId").value(instanceDTO.getSubscriptionId()));
     }
 
-
     @Test
-    public void testDeletingInstance()  throws Exception {
+    public void testDeleteInstance() throws Exception {
 
         //given
         InstanceDTO instanceDTO = newInstance();
+        long id = instanceDTO.getId();
         Optional<InstanceDTO> instanceDTO1 = Optional.of(instanceDTO);
 
         //when
-        when(instanceService.getInstance(1)).thenReturn(instanceDTO1);
-        doNothing().when(instanceService).deleteInstance(1);
-
+        when(instanceService.getInstance(id)).thenReturn(instanceDTO1);
+        doNothing().when(instanceService).deleteInstance(id);
 
         //then
-        mvc.perform(delete("/instances/{id}", 1).contentType(APPLICATION_JSON_UTF8))
+        mvc.perform(delete("/instances/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
-
     }
 
-    private InstanceDTO newInstance(){
+    private InstanceDTO newInstance() {
         InstanceDTO instanceDTO = new InstanceDTO();
         instanceDTO.setId(1);
         instanceDTO.setOrganizationId("sampleOrgId1");
