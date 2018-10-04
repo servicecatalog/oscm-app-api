@@ -1,4 +1,4 @@
-# oscm-app-api
+# oscm-cm-provisioning
 
 ## Build status
 
