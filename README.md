@@ -1,8 +1,8 @@
-# oscm-app-api
+# oscm-cm-api
 
 ## Build status
 
-[![Build status](https://travis-ci.org/servicecatalog/oscm-app-api.svg?branch=master)](https://travis-ci.org/servicecatalog/oscm-app-api)
+[![Build status](https://travis-ci.org/servicecatalog/oscm-cm-api.svg?branch=master)](https://travis-ci.org/servicecatalog/oscm-cm-api)
 
 ## Running the application
 
