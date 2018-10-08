@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.service;
 
 import org.modelmapper.ModelMapper;
@@ -32,17 +40,21 @@ public class InstanceServiceImpl implements InstanceService {
 
         Instance instance = mapper.map(instanceDTO, Instance.class);
 
-        instance.getInstanceParameters().forEach(param->param.setInstance(instance));
-        instance.getInstanceAttributes().forEach(att->att.setInstance(instance));
+        instance.getInstanceParameters()
+                .forEach(param -> param.setInstance(instance));
+        instance.getInstanceAttributes()
+                .forEach(att -> att.setInstance(instance));
 
         instance.setRequestTime(LocalDateTime.now(ZoneId.systemDefault()));
-        instance.setProvisioningStatus(ProvisioningStatus.WAITING_FOR_SYSTEM_CREATION);
+        instance.setProvisioningStatus(
+                ProvisioningStatus.WAITING_FOR_SYSTEM_CREATION);
 
-        //TODO: generating unique instance id
+        // TODO: generating unique instance id
         instance.setInstanceId("some_generated_id");
 
         Instance createdInstance = repository.save(instance);
-        InstanceDTO mappedInstance = mapper.map(createdInstance, InstanceDTO.class);
+        InstanceDTO mappedInstance = mapper.map(createdInstance,
+                InstanceDTO.class);
 
         return mappedInstance;
     }
@@ -51,8 +63,9 @@ public class InstanceServiceImpl implements InstanceService {
     public Optional<InstanceDTO> getInstance(long id) {
 
         Optional<Instance> instance = repository.findById(id);
-        if(instance.isPresent()){
-            InstanceDTO instanceDTO = mapper.map(instance.get(), InstanceDTO.class);
+        if (instance.isPresent()) {
+            InstanceDTO instanceDTO = mapper.map(instance.get(),
+                    InstanceDTO.class);
             return Optional.of(instanceDTO);
         }
 
@@ -63,7 +76,9 @@ public class InstanceServiceImpl implements InstanceService {
     public List<InstanceDTO> getAllInstances() {
 
         List<Instance> instances = repository.findAll();
-        List<InstanceDTO> mappedInstances = instances.stream().map(i -> mapper.map(i, InstanceDTO.class)).collect(Collectors.toList());
+        List<InstanceDTO> mappedInstances = instances.stream()
+                .map(i -> mapper.map(i, InstanceDTO.class))
+                .collect(Collectors.toList());
 
         return mappedInstances;
     }
@@ -73,55 +88,59 @@ public class InstanceServiceImpl implements InstanceService {
         repository.deleteById(id);
     }
 
-
     @Override
-    public InstanceDTO updateInstance(InstanceDTO instanceDTO,  Optional<InstanceDTO> result) {
+    public InstanceDTO updateInstance(InstanceDTO instanceDTO,
+            Optional<InstanceDTO> result) {
 
-            Map<String, String> keyToValue = instanceDTO.getAttributes().stream().collect(Collectors.toMap(
-                    InstanceAttributeDTO::getKey,
-                    InstanceAttributeDTO::getValue
-            ));
-            for (InstanceAttributeDTO instanceAttributeDTO : result.get().getAttributes()) {
-                String newValue = keyToValue.get(instanceAttributeDTO.getKey());
-                if (newValue != null) {
-                    instanceAttributeDTO.setValue(newValue);
-                    keyToValue.remove(instanceAttributeDTO.getKey());
-                }
+        Map<String, String> keyToValue = instanceDTO.getAttributes().stream()
+                .collect(Collectors.toMap(InstanceAttributeDTO::getKey,
+                        InstanceAttributeDTO::getValue));
+        for (InstanceAttributeDTO instanceAttributeDTO : result.get()
+                .getAttributes()) {
+            String newValue = keyToValue.get(instanceAttributeDTO.getKey());
+            if (newValue != null) {
+                instanceAttributeDTO.setValue(newValue);
+                keyToValue.remove(instanceAttributeDTO.getKey());
             }
-            for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO.getAttributes()) {
-                if (keyToValue.containsKey(instanceAttributeDTO.getKey())) {
-                    result.get().getAttributes().add(instanceAttributeDTO);
-                }
+        }
+        for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO
+                .getAttributes()) {
+            if (keyToValue.containsKey(instanceAttributeDTO.getKey())) {
+                result.get().getAttributes().add(instanceAttributeDTO);
             }
+        }
 
-            Map<String, String> keyToValueParam = instanceDTO.getParameters().stream().collect(Collectors.toMap(
-                    InstanceParameterDTO::getKey,
-                    InstanceParameterDTO::getValue
-            ));
-            for (InstanceParameterDTO instanceParameterDTO : result.get().getParameters()) {
-                String newValue = keyToValueParam.get(instanceParameterDTO.getKey());
-                if (newValue != null) {
-                    instanceParameterDTO.setValue(newValue);
-                    keyToValueParam.remove(instanceParameterDTO.getKey());
-                }
+        Map<String, String> keyToValueParam = instanceDTO.getParameters()
+                .stream().collect(Collectors.toMap(InstanceParameterDTO::getKey,
+                        InstanceParameterDTO::getValue));
+        for (InstanceParameterDTO instanceParameterDTO : result.get()
+                .getParameters()) {
+            String newValue = keyToValueParam
+                    .get(instanceParameterDTO.getKey());
+            if (newValue != null) {
+                instanceParameterDTO.setValue(newValue);
+                keyToValueParam.remove(instanceParameterDTO.getKey());
             }
-            for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO.getAttributes()) {
-                if (keyToValueParam.containsKey(instanceAttributeDTO.getKey())) {
-                    result.get().getAttributes().add(instanceAttributeDTO);
-                }
+        }
+        for (InstanceAttributeDTO instanceAttributeDTO : instanceDTO
+                .getAttributes()) {
+            if (keyToValueParam.containsKey(instanceAttributeDTO.getKey())) {
+                result.get().getAttributes().add(instanceAttributeDTO);
             }
-            save(instanceDTO);
-            return instanceDTO;
+        }
+        save(instanceDTO);
+        return instanceDTO;
     }
-
 
     @Override
     public void save(InstanceDTO instanceDTO) {
 
         Instance instance = mapper.map(instanceDTO, Instance.class);
 
-        instance.getInstanceParameters().forEach(param -> param.setInstance(instance));
-        instance.getInstanceAttributes().forEach(att -> att.setInstance(instance));
+        instance.getInstanceParameters()
+                .forEach(param -> param.setInstance(instance));
+        instance.getInstanceAttributes()
+                .forEach(att -> att.setInstance(instance));
         repository.save(instance);
     }
 }

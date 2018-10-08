@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.service.intf;
 
 import org.oscm.app.dto.InstanceDTO;
@@ -15,7 +23,8 @@ public interface InstanceService {
 
     void deleteInstance(long id);
 
-    InstanceDTO updateInstance(InstanceDTO InstanceDTO, Optional<InstanceDTO> result);
+    InstanceDTO updateInstance(InstanceDTO InstanceDTO,
+            Optional<InstanceDTO> result);
 
     void save(InstanceDTO instanceDTO);
 }

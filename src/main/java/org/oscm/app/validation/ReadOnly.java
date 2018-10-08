@@ -7,11 +7,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ReadOnlyValidator.class)
 public @interface ReadOnly {
     String message() default "is read-only, not allowed to be set in request";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

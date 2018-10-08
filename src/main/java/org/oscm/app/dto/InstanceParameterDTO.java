@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.dto;
 
 import io.swagger.annotations.ApiModel;
@@ -7,13 +15,13 @@ import org.oscm.app.validation.ReadOnly;
 @ApiModel(value = "Parameter", description = "Parameter of the instance")
 public class InstanceParameterDTO {
 
-    @ApiModelProperty(notes="Identifier of teh parameter", readOnly = true)
+    @ApiModelProperty(notes = "Identifier of teh parameter", readOnly = true)
     private long id;
 
-    @ApiModelProperty(notes="Unique key describing instance's parameter")
+    @ApiModelProperty(notes = "Unique key describing instance's parameter")
     private String key;
 
-    @ApiModelProperty(notes="Value of instance's parameter")
+    @ApiModelProperty(notes = "Value of instance's parameter")
     private String value;
 
     public long getId() {

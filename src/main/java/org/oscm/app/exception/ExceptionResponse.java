@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.exception;
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +26,6 @@ public class ExceptionResponse {
 
     @ApiModelProperty("Message describing the error")
     private String errorMessage;
-
 
     public LocalDateTime getTimestamp() {
         return timestamp;

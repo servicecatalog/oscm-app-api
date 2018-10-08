@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.dto;
 
 import io.swagger.annotations.ApiModel;
@@ -12,42 +20,41 @@ import java.util.List;
 @ApiModel(value = "Instance", description = "Instance to be provisioned by the system")
 public class InstanceDTO {
 
-    @ApiModelProperty(position = 1, notes="Identifier of existing instance", readOnly = true)
+    @ApiModelProperty(position = 1, notes = "Identifier of existing instance", readOnly = true)
     private long id;
 
-    @ApiModelProperty(position = 2, notes="Identifier of existing organization", required = true)
+    @ApiModelProperty(position = 2, notes = "Identifier of existing organization", required = true)
     @NotEmpty
     private String organizationId;
 
-    @ApiModelProperty(position = 3, notes="Name of existing organization")
+    @ApiModelProperty(position = 3, notes = "Name of existing organization")
     private String organizationName;
 
-    @ApiModelProperty(position = 4, notes="Identifier of related subscription", required = true)
+    @ApiModelProperty(position = 4, notes = "Identifier of related subscription", required = true)
     @NotEmpty
     private String subscriptionId;
 
-    @ApiModelProperty(position = 5, notes="Unique identifier of related subscription", required = true)
+    @ApiModelProperty(position = 5, notes = "Unique identifier of related subscription", required = true)
     private String referenceId;
 
-    @ApiModelProperty(position = 6, notes="Status of instance provisioning process", readOnly = true)
+    @ApiModelProperty(position = 6, notes = "Status of instance provisioning process", readOnly = true)
     @ReadOnly
     private String provisioningStatus;
 
-    @ApiModelProperty(position = 7, notes="Latest message related to instance provisioning process", readOnly = true)
+    @ApiModelProperty(position = 7, notes = "Latest message related to instance provisioning process", readOnly = true)
     @ReadOnly
     private String provisioningMsg;
 
-    @ApiModelProperty(position = 8, notes="Timestamp of the instance creation", readOnly = true)
+    @ApiModelProperty(position = 8, notes = "Timestamp of the instance creation", readOnly = true)
     @ReadOnly
     private String requestTime;
 
-    @ApiModelProperty(position = 9, notes="Unique, automatically generated instance's identifier", readOnly = true)
+    @ApiModelProperty(position = 9, notes = "Unique, automatically generated instance's identifier", readOnly = true)
     @ReadOnly
     private String instanceId;
 
     @ControllerId
-    @ApiModelProperty(position = 10, notes = "Id of the APP controller",
-            allowableValues = "ess.aws, ess.openstack, ess.azure, ess.vmware", required = true)
+    @ApiModelProperty(position = 10, notes = "Id of the APP controller", allowableValues = "ess.aws, ess.openstack, ess.azure, ess.vmware", required = true)
     @NotEmpty
     private String controllerId;
 

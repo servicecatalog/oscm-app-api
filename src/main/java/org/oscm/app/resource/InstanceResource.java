@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.resource;
 
 import io.swagger.annotations.*;
@@ -39,12 +47,10 @@ public class InstanceResource {
 
     @ApiOperation("Retrieves the details of instance")
     @ApiResponses({
-            @ApiResponse(code = 404, message = HttpStatusMessage.MSG_404, response = ExceptionResponse.class)
-    })
+            @ApiResponse(code = 404, message = HttpStatusMessage.MSG_404, response = ExceptionResponse.class) })
     @GetMapping("/instances/{id}")
     public ResponseEntity<InstanceDTO> getInstance(
-            @ApiParam(value = ApiParamValue.INSTANCE_ID, required = true)
-            @PathVariable Long id) {
+            @ApiParam(value = ApiParamValue.INSTANCE_ID, required = true) @PathVariable Long id) {
 
         InstanceDTO instance = checkIfInstanceIdExists(id);
         return ResponseEntity.ok(instance);
@@ -52,30 +58,27 @@ public class InstanceResource {
 
     @ApiOperation("Creates new instance")
     @ApiResponses({
-            @ApiResponse(code = 400, message = HttpStatusMessage.MSG_400, response = ExceptionResponse.class)
-    })
+            @ApiResponse(code = 400, message = HttpStatusMessage.MSG_400, response = ExceptionResponse.class) })
     @PostMapping("/instances")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<InstanceDTO> createInstance(
-            @ApiParam(value = ApiParamValue.INSTANCE, name = "instance", required = true)
-            @Valid @RequestBody InstanceDTO instanceDTO) {
+            @ApiParam(value = ApiParamValue.INSTANCE, name = "instance", required = true) @Valid @RequestBody InstanceDTO instanceDTO) {
 
-        InstanceDTO createdInstance = instanceService.createInstance(instanceDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(createdInstance.getId()).toUri();
+        InstanceDTO createdInstance = instanceService
+                .createInstance(instanceDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdInstance.getId()).toUri();
 
         return ResponseEntity.created(location).body(createdInstance);
     }
 
     @ApiOperation("Removes existing instance")
     @ApiResponses({
-            @ApiResponse(code = 404, message = HttpStatusMessage.MSG_404, response = ExceptionResponse.class)
-    })
+            @ApiResponse(code = 404, message = HttpStatusMessage.MSG_404, response = ExceptionResponse.class) })
     @DeleteMapping("/instances/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteInstance(
-            @ApiParam(value = ApiParamValue.INSTANCE_ID, required = true)
-            @PathVariable Long id) {
+            @ApiParam(value = ApiParamValue.INSTANCE_ID, required = true) @PathVariable Long id) {
 
         checkIfInstanceIdExists(id);
         instanceService.deleteInstance(id);
@@ -84,26 +87,27 @@ public class InstanceResource {
     }
 
     @PutMapping("/instances")
-    public ResponseEntity<InstanceDTO> updateInstance(@RequestBody InstanceDTO instanceDTO){
+    public ResponseEntity<InstanceDTO> updateInstance(
+            @RequestBody InstanceDTO instanceDTO) {
 
-
-        Optional<InstanceDTO> result = instanceService.getInstance(instanceDTO.getId());
-        if (result.isPresent()){
+        Optional<InstanceDTO> result = instanceService
+                .getInstance(instanceDTO.getId());
+        if (result.isPresent()) {
             instanceService.updateInstance(instanceDTO, result);
             return ResponseEntity.ok(instanceDTO);
-        }
-        else return ResponseEntity.badRequest().body(instanceDTO);
+        } else
+            return ResponseEntity.badRequest().body(instanceDTO);
 
     }
 
     private InstanceDTO checkIfInstanceIdExists(Long id) {
 
         Optional<InstanceDTO> instance = instanceService.getInstance(id);
-        if(!instance.isPresent()) {
-            throw new ObjectNotFoundException("Instance [id=" + id + "] has not been found");
+        if (!instance.isPresent()) {
+            throw new ObjectNotFoundException(
+                    "Instance [id=" + id + "] has not been found");
         }
         return instance.get();
     }
-
 
 }

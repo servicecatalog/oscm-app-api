@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.service;
 
 import org.modelmapper.ModelMapper;
@@ -41,25 +49,31 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public ConfigurationDTO createConfiguration(ConfigurationDTO configuration) {
+    public ConfigurationDTO createConfiguration(
+            ConfigurationDTO configuration) {
 
         Configuration organization = toConfiguration(configuration);
-        Configuration createdOrganization = configurationRepository.save(organization);
+        Configuration createdOrganization = configurationRepository
+                .save(organization);
 
         return toConfigurationDTO(createdOrganization);
     }
 
     @Override
-    public ConfigurationDTO updateConfiguration(ConfigurationDTO configuration) {
+    public ConfigurationDTO updateConfiguration(
+            ConfigurationDTO configuration) {
 
         String orgId = configuration.getOrganizationId();
         String controllerId = configuration.getControllerId();
 
-        Configuration storedConfiguration = configurationRepository.getOne(configuration.getId());
+        Configuration storedConfiguration = configurationRepository
+                .getOne(configuration.getId());
         storedConfiguration.setOrganizationId(orgId);
-        storedConfiguration.setController(getControllerById(controllerId).get());
+        storedConfiguration
+                .setController(getControllerById(controllerId).get());
 
-        Configuration createdOrganization = configurationRepository.save(storedConfiguration);
+        Configuration createdOrganization = configurationRepository
+                .save(storedConfiguration);
 
         return toConfigurationDTO(createdOrganization);
     }
@@ -69,8 +83,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
         List<Configuration> configurations = configurationRepository.findAll();
         List<ConfigurationDTO> dtos = configurations.stream()
-                .map(c -> toConfigurationDTO(c))
-                .collect(Collectors.toList());
+                .map(c -> toConfigurationDTO(c)).collect(Collectors.toList());
 
         return dtos;
     }
@@ -82,8 +95,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         String orgId = configuration.getOrganizationId();
         Optional<Controller> controller = getControllerById(controllerId);
 
-        Optional<Configuration> optional = configurationRepository.findByOrganizationIdAndController(orgId,
-                controller.get());
+        Optional<Configuration> optional = configurationRepository
+                .findByOrganizationIdAndController(orgId, controller.get());
 
         return optional.isPresent();
     }
@@ -91,9 +104,11 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     @Override
     public Optional<ConfigurationDTO> getConfigurationById(long id) {
 
-        Optional<Configuration> configuration = configurationRepository.findById(id);
+        Optional<Configuration> configuration = configurationRepository
+                .findById(id);
         if (configuration.isPresent()) {
-            ConfigurationDTO configurationDTO = toConfigurationDTO(configuration.get());
+            ConfigurationDTO configurationDTO = toConfigurationDTO(
+                    configuration.get());
             return Optional.of(configurationDTO);
         }
 
@@ -107,72 +122,88 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public List<ConfigurationDTO> getConfigurationsForOrganization(String organizationId) {
-        List<Configuration> configurations = configurationRepository.findByOrganizationId(organizationId);
+    public List<ConfigurationDTO> getConfigurationsForOrganization(
+            String organizationId) {
+        List<Configuration> configurations = configurationRepository
+                .findByOrganizationId(organizationId);
         List<ConfigurationDTO> mappedConfigurations = configurations.stream()
-                .map(c -> toConfigurationDTO(c))
-                .collect(Collectors.toList());
+                .map(c -> toConfigurationDTO(c)).collect(Collectors.toList());
 
         return mappedConfigurations;
     }
 
     @Override
-    public List<ConfigurationSettingDTO> getConfigurationSettings(long configurationId) {
+    public List<ConfigurationSettingDTO> getConfigurationSettings(
+            long configurationId) {
 
-        Configuration configuration = configurationRepository.getOne(configurationId);
-        List<ConfigurationSetting> settings = settingRepository.findByConfiguration(configuration);
+        Configuration configuration = configurationRepository
+                .getOne(configurationId);
+        List<ConfigurationSetting> settings = settingRepository
+                .findByConfiguration(configuration);
 
-        List<ConfigurationSettingDTO> mappedSettings = settings.stream()
-                .map(setting -> mapper.map(setting, ConfigurationSettingDTO.class))
+        List<ConfigurationSettingDTO> mappedSettings = settings.stream().map(
+                setting -> mapper.map(setting, ConfigurationSettingDTO.class))
                 .collect(Collectors.toList());
 
         return mappedSettings;
     }
 
     @Override
-    public ConfigurationSettingDTO createConfigurationSetting(long configurationId, ConfigurationSettingDTO settingDTO) {
+    public ConfigurationSettingDTO createConfigurationSetting(
+            long configurationId, ConfigurationSettingDTO settingDTO) {
 
-        ConfigurationSetting setting = mapper.map(settingDTO, ConfigurationSetting.class);
-        Configuration configuration = configurationRepository.getOne(configurationId);
+        ConfigurationSetting setting = mapper.map(settingDTO,
+                ConfigurationSetting.class);
+        Configuration configuration = configurationRepository
+                .getOne(configurationId);
         setting.setConfiguration(configuration);
 
         ConfigurationSetting createdSetting = settingRepository.save(setting);
-        ConfigurationSettingDTO mappedSetting = mapper.map(createdSetting, ConfigurationSettingDTO.class);
+        ConfigurationSettingDTO mappedSetting = mapper.map(createdSetting,
+                ConfigurationSettingDTO.class);
         return mappedSetting;
     }
 
     @Override
-    public Optional<ConfigurationSettingDTO> getConfigurationSettingById(long settingId) {
+    public Optional<ConfigurationSettingDTO> getConfigurationSettingById(
+            long settingId) {
 
-        Optional<ConfigurationSetting> setting = settingRepository.findById(settingId);
-        if (setting.isPresent()){
-            ConfigurationSettingDTO mappedSetting = mapper.map(setting.get(), ConfigurationSettingDTO.class);
+        Optional<ConfigurationSetting> setting = settingRepository
+                .findById(settingId);
+        if (setting.isPresent()) {
+            ConfigurationSettingDTO mappedSetting = mapper.map(setting.get(),
+                    ConfigurationSettingDTO.class);
             return Optional.of(mappedSetting);
         }
         return Optional.empty();
     }
 
     @Override
-    public boolean checkIfSettingAlreadyExists(long configurationId, String key) {
+    public boolean checkIfSettingAlreadyExists(long configurationId,
+            String key) {
 
-        Configuration configuration = configurationRepository.getOne(configurationId);
-        List<ConfigurationSetting> settings = settingRepository.findByConfiguration(configuration);
+        Configuration configuration = configurationRepository
+                .getOne(configurationId);
+        List<ConfigurationSetting> settings = settingRepository
+                .findByConfiguration(configuration);
 
         Optional<ConfigurationSetting> matchingSetting = settings.stream()
-                .filter(setting -> key.equals(setting.getKey()))
-                .findFirst();
+                .filter(setting -> key.equals(setting.getKey())).findFirst();
 
         return matchingSetting.isPresent();
     }
 
     @Override
-    public ConfigurationSettingDTO updateConfigurationSetting(ConfigurationSettingDTO setting) {
+    public ConfigurationSettingDTO updateConfigurationSetting(
+            ConfigurationSettingDTO setting) {
 
-        ConfigurationSetting existingSetting = settingRepository.getOne(setting.getId());
+        ConfigurationSetting existingSetting = settingRepository
+                .getOne(setting.getId());
         existingSetting.setKey(setting.getKey());
         existingSetting.setValue(setting.getValue());
 
-        ConfigurationSetting updatedSetting = settingRepository.save(existingSetting);
+        ConfigurationSetting updatedSetting = settingRepository
+                .save(existingSetting);
 
         return mapper.map(updatedSetting, ConfigurationSettingDTO.class);
     }
@@ -182,7 +213,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
         settingRepository.deleteById(id);
     }
-
 
     private Configuration toConfiguration(ConfigurationDTO dto) {
 

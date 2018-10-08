@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ControllerIdValidator implements ConstraintValidator<ControllerId, String> {
+public class ControllerIdValidator
+        implements ConstraintValidator<ControllerId, String> {
 
     @Override
     public void initialize(ControllerId constraintAnnotation) {
@@ -19,7 +20,8 @@ public class ControllerIdValidator implements ConstraintValidator<ControllerId, 
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
         Stream<Controller> controllers = Arrays.stream(Controller.values());
-        Optional<Controller> controller = controllers.filter(c -> c.getControllerId().equals(value)).findFirst();
+        Optional<Controller> controller = controllers
+                .filter(c -> c.getControllerId().equals(value)).findFirst();
 
         return controller.isPresent();
     }

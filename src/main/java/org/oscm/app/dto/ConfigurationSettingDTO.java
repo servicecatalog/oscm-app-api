@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.dto;
 
 import io.swagger.annotations.ApiModel;
@@ -9,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @ApiModel(value = "Setting", description = "Single configuration's setting")
 public class ConfigurationSettingDTO {
 
-    @ApiModelProperty(position = 1, notes="Identifier of the setting", readOnly = true)
+    @ApiModelProperty(position = 1, notes = "Identifier of the setting", readOnly = true)
     private long id;
 
     @ApiModelProperty(position = 2, notes = "Unique setting's key", required = true)

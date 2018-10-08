@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.dto;
 
 import io.swagger.annotations.ApiModel;
@@ -11,11 +19,10 @@ import javax.validation.constraints.NotEmpty;
 @ApiModel(value = "Configuration", description = "Simple configuration with organization and controller relation")
 public class ConfigurationDTO {
 
-    @ApiModelProperty(position = 1, notes="Identifier of existing configuration", readOnly = true)
+    @ApiModelProperty(position = 1, notes = "Identifier of existing configuration", readOnly = true)
     private long id;
 
-    @ApiModelProperty(position = 2, notes = "Id of the APP controller",
-            allowableValues = "ess.aws, ess.openstack, ess.azure, ess.vmware", required = true)
+    @ApiModelProperty(position = 2, notes = "Id of the APP controller", allowableValues = "ess.aws, ess.openstack, ess.azure, ess.vmware", required = true)
     @NotEmpty
     @ControllerId
     private String controllerId;

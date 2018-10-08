@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.exception;
 
 import org.springframework.http.HttpHeaders;
@@ -18,34 +26,43 @@ import java.util.HashMap;
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity handleAllExceptions(Exception ex, WebRequest request) {
+    public final ResponseEntity handleAllExceptions(Exception ex,
+            WebRequest request) {
 
-        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), ex.getMessage());
+        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(),
+                ex.getMessage());
         return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
     @ExceptionHandler(ObjectNotFoundException.class)
-    public final ResponseEntity handleObjectNotFoundException(ObjectNotFoundException exception, WebRequest request){
+    public final ResponseEntity handleObjectNotFoundException(
+            ObjectNotFoundException exception, WebRequest request) {
 
-        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), exception.getMessage());
+        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(),
+                exception.getMessage());
         return new ResponseEntity(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ValidationException.class)
-    public final ResponseEntity handleValidationException(ValidationException exception, WebRequest request){
+    public final ResponseEntity handleValidationException(
+            ValidationException exception, WebRequest request) {
 
-        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), exception.getMessage());
+        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(),
+                exception.getMessage());
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
 
         HashMap<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().stream().forEach(e->errors.put(e.getField(),e.getDefaultMessage()));
+        ex.getBindingResult().getFieldErrors().stream()
+                .forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
 
-        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), "Validation failed: "+errors);
+        ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(),
+                "Validation failed: " + errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

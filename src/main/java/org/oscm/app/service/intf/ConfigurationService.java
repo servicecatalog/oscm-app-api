@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.service.intf;
 
 import org.oscm.app.dto.ConfigurationDTO;
@@ -23,17 +31,22 @@ public interface ConfigurationService {
 
     void deleteConfiguration(long id);
 
-    List<ConfigurationDTO> getConfigurationsForOrganization(String organizationId);
+    List<ConfigurationDTO> getConfigurationsForOrganization(
+            String organizationId);
 
-    List<ConfigurationSettingDTO> getConfigurationSettings(long configurationId);
+    List<ConfigurationSettingDTO> getConfigurationSettings(
+            long configurationId);
 
-    ConfigurationSettingDTO createConfigurationSetting(long configurationId, ConfigurationSettingDTO setting);
+    ConfigurationSettingDTO createConfigurationSetting(long configurationId,
+            ConfigurationSettingDTO setting);
 
-    Optional<ConfigurationSettingDTO> getConfigurationSettingById(long settingId);
+    Optional<ConfigurationSettingDTO> getConfigurationSettingById(
+            long settingId);
 
     boolean checkIfSettingAlreadyExists(long configurationId, String key);
 
-    ConfigurationSettingDTO updateConfigurationSetting(ConfigurationSettingDTO setting);
+    ConfigurationSettingDTO updateConfigurationSetting(
+            ConfigurationSettingDTO setting);
 
     void deleteConfigurationSetting(long id);
 

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ *                                                                              
+ *  Copyright FUJITSU LIMITED 2018
+ *                                                                                                                                 
+ *  Creation Date: 08.10.20178                                                      
+ *                                                                              
+ *******************************************************************************/
+
 package org.oscm.app.domain;
 
 import org.oscm.app.domain.enumeration.ProvisioningStatus;
@@ -129,7 +137,8 @@ public class Instance {
         return instanceParameters;
     }
 
-    public void setInstanceParameters(List<InstanceParameter> instanceParameters) {
+    public void setInstanceParameters(
+            List<InstanceParameter> instanceParameters) {
         this.instanceParameters = instanceParameters;
     }
 
@@ -137,7 +146,8 @@ public class Instance {
         return instanceAttributes;
     }
 
-    public void setInstanceAttributes(List<InstanceAttribute> instanceAttributes) {
+    public void setInstanceAttributes(
+            List<InstanceAttribute> instanceAttributes) {
         this.instanceAttributes = instanceAttributes;
     }
 }
